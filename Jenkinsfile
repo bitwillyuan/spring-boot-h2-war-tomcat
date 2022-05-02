@@ -34,6 +34,7 @@ pipeline {
                 branch 'develop';
             }
            steps {
+               input message: 'Finished using the web site? (Click "Proceed" to continue)'
                sh "mvn clean test"
             }
         }
