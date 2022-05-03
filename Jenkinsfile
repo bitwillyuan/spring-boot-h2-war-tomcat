@@ -4,6 +4,10 @@ pipeline {
         maven 'MAVEN_PATH'
         jdk 'jdk8'
     }
+    options {
+        // No simultaneous builds
+        disableConcurrentBuilds()
+    }
     stages {
         stage("Tools initialization") {
             steps {
