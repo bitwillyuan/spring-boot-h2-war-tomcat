@@ -21,6 +21,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<finalName>spring-h2-demo</finalName>
+                <main.user.dir>.</main.user.dir>
 	</properties>
 
 	<scm>
@@ -125,6 +126,29 @@
 					</execution>
 				</executions>
 			</plugin>
+                        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.17.0</version>
+                <configuration>
+                    <printFailingErrors>true</printFailingErrors>
+                    <linkXRef>false</linkXRef>
+                    <includeTests>true</includeTests>
+                    <failOnViolation>false</failOnViolation>
+                    <rulesets>
+                        <ruleset>${main.user.dir}/pmd-ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>

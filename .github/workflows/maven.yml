@@ -1,0 +1,41 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: CI
+
+on: [ pull_request,push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        jdk: [ 8 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.jdk }}
+
+      - name: checkstyle
+        uses: nikitasavinov/checkstyle-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: 'github-pr-check'
+          fail_on_error: true
+          level: error
+          checkstyle_config: 'check-style.xml'
+
+      - name: pmd check
+        uses: pmd/pmd-github-action@v1
+        id: pmd
+        with:
+          version: '6.46.0'
+          sourcePath: '.'
+          analyzeModifiedFilesOnly: false
+          rulesets: 'pmd-ruleset.xml'
+
+      - name: Fail build if there a violations
+        if: steps.pmd.outputs.violations != 0
+        run: exit 1
